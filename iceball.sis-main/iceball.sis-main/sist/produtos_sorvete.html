@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listagem de Produtos - Sorvetes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Sour+Gummy:wdth,wght@100..125,377&display=swap" rel="stylesheet">
+     <script src="sistem9.js"></script>   
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Sour Gummy", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 377;
+            font-style: normal;
+        }
+
+        /* Cores principais */
+        :root {
+            --cor-rosa: #ffcce6;
+            --cor-creme: #ffedc2;
+            --cor-marrom: #a67b5b;
+            --cor-borda: #a67b5b;
+            --cor-texto: #333;
+        }
+
+        /* Layout principal */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #fff;
+        }
+
+        /* Cabeçalho */
+        header {
+            background-color: var(--cor-rosa);
+            padding: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo{
+            height: 70px;
+            width: 80px;
+
+        }
+
+        /* Menu de navegação */
+        nav {
+            background-color: var(--cor-creme);
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid var(--cor-borda);
+        }
+
+        .menu-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 30px;
+        }
+
+        .menu-icon span {
+            height: 3px;
+            width: 100%;
+            background-color: var(--cor-texto);
+            margin: 2px 0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            width: 100%;
+            justify-content: space-evenly;
+        }
+
+        .nav-btn {
+            background-color: var(--cor-marrom);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 5px 20px;
+            font-size: 18px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+
+        .nav-btn:hover {
+            background-color: #8B5A2B;
+        }
+
+        .nav-btn.active {
+            background-color: #654321;
+        }
+
+        /* Layout principal de conteúdo */
+        .content-container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Menu lateral */
+        .sidebar {
+            width: 200px;
+            background-color: var(--cor-creme);
+            padding: 20px 0;
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 15px;
+            padding: 5px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar li a {
+            text-decoration: none;
+            color: var(--cor-texto);
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar li:hover {
+            background-color: #f8e3a3;
+        }
+
+        .sidebar li.active {
+            font-weight: bold;
+        }
+
+        .sidebar li a::before {
+            content: "▶";
+            margin-right: 10px;
+            color: #333;
+        }
+
+        /* Área principal */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Título da página */
+        .page-title {
+            font-size: 28px;
+            color: var(--cor-texto);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        /* Grid de produtos */
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* Card de produto */
+        .produto-card {
+            border: 2px solid var(--cor-rosa);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .produto-imagem {
+            width: 350px;
+            height: 300px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--cor-rosa);
+        }
+
+        .produto-info {
+            padding: 15px;
+        }
+
+        .produto-nome {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--cor-texto);
+        }
+
+        .produto-detalhe {
+            margin-bottom: 8px;
+            display: flex;
+        }
+
+        .produto-detalhe strong {
+            width: 100px;
+            color: var(--cor-marrom);
+        }
+
+        .produto-cod {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .produto-preco {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--cor-texto);
+            margin: 10px 0;
+        }
+
+        .produto-fornecedor {
+            font-size: 14px;
+            color: #555;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .produto-descricao {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--cor-texto);
+            line-height: 1.4;
+        }
+
+        /* Botão Ver Detalhes */
+        .btn-detalhes {
+            display: block;
+            width: 100%;
+            background-color: var(--cor-marrom);
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+            transition: background-color 0.3s;
+        }
+
+        .btn-detalhes:hover {
+            background-color: #8B5A2B;
+        }
+
+        /* Estilos do Footer */
+        .footer {
+        background-color: var(--cor-creme);
+        border-top: 3px solid var(--cor-rosa);
+        padding: 20px 0 0 0;
+        
+        }
+
+        .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        }
+
+        .footer-section {
+        flex: 1;
+        min-width: 200px;
+        margin-bottom: 20px;
+        padding: 0 15px;
+        }
+
+        .footer-logo {
+        height: 50px;
+        width: 60px;
+        margin-bottom: 10px;
+        }
+
+        .company-info h3 {
+        color: var(--cor-marrom);
+        margin-bottom: 10px;
+        }
+
+        .company-info p {
+        color: var(--cor-texto);
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+        }
+
+        .footer-section h4 {
+        color: var(--cor-marrom);
+        margin-bottom: 15px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid var(--cor-rosa);
+        display: inline-block;
+        }
+
+        .footer-section ul {
+        list-style: none;
+        }
+
+        .footer-section ul li {
+        margin-bottom: 8px;
+        }
+
+        .footer-section a {
+        color: var(--cor-texto);
+        text-decoration: none;
+        transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+        color: var(--cor-marrom);
+        text-decoration: underline;
+        }
+
+        .contact p {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        }
+
+        .location-icon::before,
+        .phone-icon::before,
+        .email-icon::before {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        background-color: var(--cor-marrom);
+        border-radius: 50%;
+        }
+
+        .social-icons {
+        display: flex;
+        gap: 15px;
+        }
+
+        .social-icon {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        width: 32px;
+        height: 32px;
+        background-color: var(--cor-marrom);
+        border-radius: 50%;
+        transition: transform 0.3s, background-color 0.3s;
+        position: relative;
+        }
+
+        .social-icon:hover {
+        transform: translateY(-3px);
+        background-color: var(--cor-rosa);
+        }
+
+        .footer-bottom {
+        background-color: var(--cor-marrom);
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+        margin-top: 20px;
+        font-size: 0.9rem;
+        }
+
+        .footer-bottom-links {
+        margin-top: 10px;
+        }
+
+        .footer-bottom-links a {
+        color: white;
+        text-decoration: none;
+        padding: 0 10px;
+        }
+
+        .footer-bottom-links a:hover {
+        text-decoration: underline;
+        }
+
+        .separator {
+        color: var(--cor-rosa);
+        }
+
+        .paia{
+            width:60px;
+
+        }
+
+        .logofooter{
+            width: 25px;
+            margin:auto;
+
+        }
+        /* Botão de fechar sistema */
+        .btn-fechar {
+            padding: 12px 50px;
+            font-size: 1.2rem;
+            background-color: white;
+            color: #3a2618;
+            border: 2px solid #fdb4ce;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-fechar a{
+            text-decoration: none;
+            color: #333;
+        }
+        /* Efeito de hover no botão */
+        .btn-fechar:hover {
+            background-color: #f8cfdd;
+        }
+
+        /* Efeito da sombra rosa sob o botão */
+        .btn-container {
+            margin-top: 25px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn-shadow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #fdb4ce;
+            border-radius: 25px;
+            top: 5px;
+            left: 0;
+            z-index: -1;
+        }
+
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .produtos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 10px 0;
+            }
+
+            .produtos-grid {
+                grid-template-columns: 1fr;
+                padding: 0 15px;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho com logo -->
+    <header>
+        <img src="imagens/logo.png" alt="ice" class="logo">
+        <h2>Sistema de controle de estoque</h2>
+    </header>
+
+    <!-- Menu de navegação superior -->
+    <nav>
+        <div class="nav-buttons">
+            <a href="cadproduto.html" class="nav-btn">Cadastro</a>
+            <a href="movimento_financeiro.html" class="nav-btn">Movimento</a>
+            <a href="pequisa_cliente.html" class="nav-btn active">Pesquisa</a>
+        </div>
+    </nav>
+
+    <!-- Container principal -->
+    <div class="content-container">
+        <!-- Menu lateral -->
+        <div class="sidebar">
+            <ul>
+                <li><a href="produtos_sorvete.html">Produto</a></li>
+                <li class="active"><a href="pequisa_cliente.html">Cliente</a></li>
+                <!--<li><a href="#">Funcionário</a></li>
+                <li><a href="#">Serviço</a></li>-->
+            </ul>
+        </div>
+
+        <!-- Conteúdo principal -->
+        <div class="main-content">
+            <h1 class="page-title">Catálogo de Produtos</h1>
+            
+            <div class="produtos-grid">
+                <!-- Produto 1: Sorvete -->
+                <div class="produto-card">
+                    <img src="imagens/chocolate.jpg" alt="Sorvete de Chocolate" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Sorvete de Chocolate</h3>
+                        <p class="produto-cod">COD: SRV001</p>
+                        <p class="produto-preco">R$ 25,90</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>05/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>05/11/2025</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Gelato Premium</p>
+                        <p class="produto-descricao">Delicioso sorvete de chocolate belga com pedaços de chocolate meio amargo. Textura cremosa e sabor intenso.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 2: Sorvete -->
+                <div class="produto-card">
+                    <img src="imagens/morango.jfif" alt="Sorvete de Morango" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Sorvete de Morango</h3>
+                        <p class="produto-cod">COD: SRV002</p>
+                        <p class="produto-preco">R$ 23,50</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>10/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>10/11/2025</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Gelato Premium</p>
+                        <p class="produto-descricao">Sorvete de morango com pedaços de fruta natural. Baixo teor de gordura e sabor refrescante.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 3: Sorvete -->
+                <div class="produto-card">
+                    <img src="imagens/creme.jfif" alt="Sorvete de Creme" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Sorvete de Creme</h3>
+                        <p class="produto-cod">COD: SRV003</p>
+                        <p class="produto-preco">R$ 21,90</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>12/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>12/11/2025</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Gelato Premium</p>
+                        <p class="produto-descricao">Tradicional sorvete cremoso, feito com fava de baunilha Madagascar. Perfeito para acompanhar sobremesas.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 4: Casquinha -->
+                <div class="produto-card">
+                    <img src="imagens/Casquinha-Para-Sorvete-Cestinha-85g-MARVI.png" alt="Casquinha Tradicional" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Casquinha Tradicional</h3>
+                        <p class="produto-cod">COD: CSQ001</p>
+                        <p class="produto-preco">R$ 12,50</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>01/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>01/05/2026</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Doce Cone</p>
+                        <p class="produto-descricao">Pacote com 50 casquinhas tradicionais crocantes. Feitas com farinha de trigo selecionada, perfeitas para sorvetes.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 5: Casquinha -->
+                <div class="produto-card">
+                    <img src="imagens/casquinhadechoc51128-2-removebg-preview.png" alt="Casquinha de Chocolate" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Casquinha de Chocolate</h3>
+                        <p class="produto-cod">COD: CSQ002</p>
+                        <p class="produto-preco">R$ 15,90</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>03/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>03/05/2026</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Doce Cone</p>
+                        <p class="produto-descricao">Pacote com 50 casquinhas sabor chocolate. Adicionam um sabor especial aos seus sorvetes favoritos.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 6: Calda -->
+                <div class="produto-card">
+                    <img src="imagens/caldadechoc5d34920c7e-removebg-preview.png" alt="Calda de Chocolate" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Calda de Chocolate</h3>
+                        <p class="produto-cod">COD: CLD001</p>
+                        <p class="produto-preco">R$ 18,75</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>08/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>08/11/2025</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Sweet Toppings</p>
+                        <p class="produto-descricao">Calda de chocolate premium 500ml. Consistência perfeita para cobertura de sorvetes e sobremesas.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 7: Calda -->
+                <div class="produto-card">
+                    <img src="imagens/caldadecaramelo.webp" alt="Calda de Caramelo" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Calda de Caramelo</h3>
+                        <p class="produto-cod">COD: CLD002</p>
+                        <p class="produto-preco">R$ 19,90</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>08/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>08/11/2025</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Sweet Toppings</p>
+                        <p class="produto-descricao">Calda de caramelo salgado 500ml. Sabor intenso que combina perfeitamente com sorvetes de baunilha e chocolate.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 8: Calda -->
+                <div class="produto-card">
+                    <img src="imagens/caldademorango.png" alt="Calda de Morango" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Calda de Morango</h3>
+                        <p class="produto-cod">COD: CLD003</p>
+                        <p class="produto-preco">R$ 17,50</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>09/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>09/11/2025</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Sweet Toppings</p>
+                        <p class="produto-descricao">Calda de morango com pedaços da fruta 500ml. Perfeita para adicionar sabor frutal aos seus sorvetes favoritos.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+
+                <!-- Produto 9: Sorvete Premium -->
+                <div class="produto-card">
+                    <img src="imagens/sorvetedepistache.jfif" alt="Sorvete Premium Pistache" class="produto-imagem">
+                    <div class="produto-info">
+                        <h3 class="produto-nome">Sorvete de Pistache</h3>
+                        <p class="produto-cod">COD: SRV004</p>
+                        <p class="produto-preco">R$ 32,90</p>
+                        <div class="produto-detalhe">
+                            <strong>Data Compra:</strong>
+                            <span>14/05/2025</span>
+                        </div>
+                        <div class="produto-detalhe">
+                            <strong>Validade:</strong>
+                            <span>14/11/2025</span>
+                        </div>
+                        <p class="produto-fornecedor">Fornecedor: Gelato Premium</p>
+                        <p class="produto-descricao">Sorvete artesanal de pistache italiano. Feito com pistaches selecionados importados, oferece um sabor sofisticado e único.</p>
+                        <a href="#" class="btn-detalhes">Ver Detalhes</a>
+                    </div>
+                </div>
+            </div>
+             <!-- Botão para fechar o sistema -->
+                    <div class="btn-container">
+                        <button class="btn-fechar"><a href="fechamento_sistema.html"> Fechar Sistema</a></button>
+                        <div class="btn-shadow"></div>
+                    </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+    <div class="footer-container">
+    <div class="footer-section company-info">
+    <div class="paia">
+            <img src="imagens/paia.png" alt="empresa" class="paia">
+        </div>
+    <h3>PAIA Sistems</h3>
+    <p>Soluções inteligentes para controle de estoque</p>
+    </div>
+
+    <div class="footer-section links">
+    <h4>Links Rápidos</h4>
+    <ul>
+    <li><a href="index.html">Início</a></li>
+    <li><a href="sobre.html">Sobre Nós</a></li>
+    <li><a href="servicos.html">Serviços</a></li>
+    <li><a href="contato.html">Contato</a></li>
+    </ul>
+    </div>
+
+    <div class="footer-section contact">
+    <h4>Contato</h4>
+    <p><i class="location-icon"></i> Av. Tecnologia, 1500 - Centro</p>
+    <p><i class="phone-icon"></i> (45) 3456-7890</p>
+    <p><i class="email-icon"></i> paia@paiasistems.com.br</p>
+    </div>
+
+    <div class="footer-section social">
+    <h4>Redes Sociais</h4>
+    <div class="social-icons">
+    <a href="#" class="social-icon facebook"><img src="imagens/face.png" class="logofooter"></a>
+    <a href="#" class="social-icon instagram"><img src="imagens/insta.png" class="logofooter"></a>
+    <a href="#" class="social-icon linkedin"><img src="imagens/linkedin.png" class="logofooter"></a>
+    <a href="#" class="social-icon tiktok"><img src="imagens/tktk.png" class="logofooter"></a>
+    </div>
+    </div>
+    </div>
+
+    <div class="footer-bottom">
+    <p>&copy; 2025 PAIA Sistems - Todos os direitos reservados</p>
+    <div class="footer-bottom-links">
+    <a href="#">Política de Privacidade</a>
+    <span class="separator">|</span>
+    <a href="#">Termos de Uso</a>
+    </div>
+    </div>
+    </footer>
+</body>
+</html>
